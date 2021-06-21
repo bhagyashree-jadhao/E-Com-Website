@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="border border-danger p-4"align="center">
+
+        <div class="border border-danger p-4" align="center">
+
+
+            <form method="POST">
+                {% csrf_token %}
+               
+
+                <div class="form-group w-25">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-control" id="" name="name">
+
+                </div>
+                <div class="form-group w-25">
+                    <label class="form-label">Mobile Number</label>
+                    <input type="number" class="form-control" id="" name="mobileno">
+                </div>
+                <div class="form-group w-25">
+                    <label class="form-label">Email-Id</label>
+                    <input type="email" class="form-control" id="" name="emailid">
+                </div>
+                <div class="form-group w-25">
+                    <label class="form-label">PIN code</label>
+                    <input type="number" class="form-control" id="" name="number">
+                </div>
+                <div class="form-group w-25">
+                    <label class="form-label">Flat,House no,Building No</label>
+                    <input type="text" class="form-control" id="" name="houseno">
+                </div>
+                <div class="form-group w-25">
+                    <label class="form-label">Area,colony,Village</label>
+                    <input type="text" class="form-control" id="" name="area">
+                </div>
+                <div class="form-group w-25">
+                    <label class="form-label">LandMark</label>
+                    <input type="text" class="form-control" id="" name="landmark">
+                </div>
+                <div class="form-group w-25">
+                    <label class="form-label">Town/City</label>
+                    <input type="text" class="form-control" id="" name="city">
+                </div>
+                <div class="form-group w-25">
+                    <label class="form-label">State</label>
+                    <input type="text" class="form-control" id="" name="state">
+                </div>
+                <div class="form-group w-25">
+                    <label class="form-label">TotalPrice</label>
+                    <input type="number" id="price" class="form-control" value="" name="totalprice">
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+        </div>
+        
+    </div>
+
+</body> 
+
+<script type="text/javascript">
+
+
+    if (localStorage.getItem('cart') == null) {
+        var cart = {};
+    }
+
+    else {
+
+        cart = JSON.parse(localStorage.getItem('cart'))
+
+    }
+
+    var totalprice = 0
+    for (var i in cart) {
+
+        price = cart[i][2]
+
+        totalprice = totalprice + price
+    }
+    $('#price').val(totalprice)
+</script>
+</html >

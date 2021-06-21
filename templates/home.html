@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container" align="center">
+            <a class="navbar-brand" href="#">Ecommerce App</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact us</a>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" id="mycart" data-html=true class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Vivamus
+sagittis lacus vel augue laoreet rutrum faucibus.">
+                            My Cart
+                        </button>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Login</a>
+                            <a class="dropdown-item" href="#">Logout</a>
+                            <a class="dropdown-item" href="#">Signup</a>
+
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0" method="POST">
+                    {% csrf_token %}
+                    <input class="form-control mr-sm-2" type="search" name="data" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+    <div class="container" align="center">
+        <div class="row">
+            {% for i in all_products %}
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                    <img class="card-img-top" src="/static/image/{{i.image}}" alt="Card image cap">
+                    <div class="card-body">
+                        <p class="card-text" id=name{{i.id}}><b>{{i.title}}</b></p>
+                        <p class="card-text" id=p{{i.id}}>{{i.price}}</p>
+                        <button class="btn atc btn-success" id={{i.id}}>Add to Cart</button>
+                        <a href="{{i.get_absulate_url}}" class="btn btn-primary">View</a><br><br>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+</body>
+
+
+<script type="text/javascript">
+
+    if (localStorage.getItem('cart') == null) {
+        var cart = {};
+    }
+
+
+
+
+
+    else {
+        cart = JSON.parse(localStorage.getItem('cart'))
+
+    }
+
+    //for every click that we perform,the above function will get executed
+    $(document).on('click', '.atc', function () {
+
+        let item_id = this.id//this represents the current object or current products ATC.
+        console.log(item_id)
+
+        
+
+
+        if (cart[item_id] != undefined)//true-->only if there is a proper value asccociated
+        {
+            quantity = cart[item_id][0] + 1//2
+            cart[item_id][0] = quantity
+            cart[item_id][2] = cart[item_id][2] + parseFloat(document.getElementById("p" + item_id).innerHTML)
+        }
+        else {
+            quantity = 1
+            price = parseFloat(document.getElementById("p" + item_id).innerHTML);
+            name = document.getElementById("name" + item_id).innerHTML
+            cart[item_id] = [quantity, name, price]
+        }
+
+
+        console.log(cart)
+
+        localStorage.setItem('cart', JSON.stringify(cart))
+        
+
+
+
+        document.getElementById("mycart").innerHTML = "Cart(" + Object.keys(cart).length + ")"
+
+    });
+
+
+    displayCart(cart)
+    function displayCart(cart) {
+        var cart = ''
+
+
+        
+        for (var i in cart)//i=2
+        {
+
+            cart = cart + "<b>Name:</b>" + document.getElementById("name" + i).innerHTML + ' ' + ' ' + 'Qty:' + cart[i][0] + "</br>"
+        }
+        cart = cart + "<a href='/checkout' class='btn btn-success'>Checkout</a>"
+
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+            document.getElementById("mycart").setAttribute('data-content', cart);
+        });
+
+
+
+
+    }
+
+</script>
+</html>
+
+
+
+
